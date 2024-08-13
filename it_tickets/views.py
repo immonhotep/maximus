@@ -407,15 +407,18 @@ def user_login(request):
                 user.profile.log_count+=1
                 user.profile.save()
                 messages.success(request,f'welcome {username} this is your {user.profile.log_count} visit on the site')
-                if user.profile.log_count == 1:
-                    messages.info(request,'After first login please check your profile and change your password')
-                    return redirect('update_profile')
+                
 
 
                 if request.user.is_superuser:
                     if user.profile.log_count == 1:
                         messages.info(request,'After first login Admin user need add at least one customer,workrole, and department')
                         return redirect('create_customer')
+                else:
+                    if user.profile.log_count == 1:
+                        messages.info(request,'After first login please check your profile and change your password')
+                        return redirect('update_profile')
+                        
 
                 return redirect('home')
             
