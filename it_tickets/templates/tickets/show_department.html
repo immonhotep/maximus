@@ -1,0 +1,40 @@
+{% extends "tickets/base.html" %}
+{% block content %}
+
+
+
+
+
+<div
+  class="block rounded-lg bg-white text-surface shadow-secondary-1 dark:bg-surface-dark dark:text-white mb-6">
+  <div
+    class="border-b-2 border-neutral-100 px-6 py-3 dark:border-white/10">
+    <span class="bg-blue-100 text-blue-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-2"> {{department.name}} </span></h6>
+  </div>
+  <div class="p-6">
+    <blockquote>
+      <p class="text-xl">
+        {{department.description}}
+      </p>
+    </blockquote>
+    <figcaption class="text-md text-neutral-500 py-4">
+      - Department <cite title="Source Title">Members:</cite>
+    </figcaption>
+        {% if dep_profiles %}
+        <div class="flex -space-x-1 overflow-hidden">
+            {% for profile in  dep_profiles %}
+                <a href="{% url 'show_account' profile.pk %}"><img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="{{profile.avatar.url}}" alt=""></a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <small><i>Currently no members in this department</i></small>
+        {% endif %}
+
+  </div>
+</div>
+
+<a href="javascript:history.go(-1)"  class="text-white  bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">back</a>
+
+
+
+{% endblock content %}

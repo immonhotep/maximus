@@ -1,0 +1,19 @@
+{% extends "tickets/base.html" %}
+ {% block content %}
+
+<h6 class="flex items-center text-2xl font-extrabold dark:text-white">Update Profile<span class="bg-blue-100 text-blue-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-2">{{form.instance.user.username}}</span></h6>
+<form method="POST" enctype="multipart/form-data">
+{% csrf_token %}
+<div class="container mx-auto py-4 ">
+{{form}}
+</div>
+
+<button type="submit" class="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">submit</button>
+<span><a href="javascript:history.go(-1)" class="text-white  bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">back</a></span>
+<span><a href="{% url 'reset_password' form.instance.user.pk %}" class="inline-block rounded bg-red-800 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-blue-3 transition duration-150 ease-in-out hover:bg-blue-accent-300 hover:shadow-red-2 focus:bg-red-accent-300 focus:shadow-red-2 focus:outline-none focus:ring-0 active:bg-red-600 active:shadow-red-2 motion-reduce:transition-none dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong">reset password</a></span>
+
+
+</form>
+
+
+ {% endblock content %}

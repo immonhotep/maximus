@@ -1,0 +1,53 @@
+{% extends "tickets/base.html" %}
+{% block content %}
+
+<div class="bg-gray-200 font-sans h-screen w-full flex flex-row justify-center items-center">
+  <div class="card w-96 mx-auto bg-white  shadow-xl hover:shadow">
+     <img class="w-32 h-32 mx-auto rounded-full  border-8 border-white" src="{{account_profile.avatar.url}}" >
+     <div class="text-center mt-2 text-3xl font-medium">{{account_profile}}</div>
+     <div class="text-center mt-2 font-light text-sm">{{account_user.email}}</div>
+     <div class="text-center mt-2 font-light text-sm">{{account_user.phone}}</div>
+     <div class="text-center font-normal text-lg">{{account_profile.department}}</div>
+     <div class="px-6 text-center mt-2 font-light text-sm">
+       <p class="text-left">
+        {{account_profile.bio}}
+       </p>
+     </div>
+     <div class="text-center mt-2 font-light text-sm">{% for role in account_profile.workrole.all|join:", " %}{{ role }}{% endfor %}</div>
+     <hr class="mt-8">
+     <div class="flex p-4">
+       <div class="w-1/2 text-center">
+        {% if request.user.profile.department_manager and account_profile.department == request.user.profile.department%}
+          <form method="POST" id="oncall">
+          {% csrf_token %}
+          {{form}}
+          </form>
+        
+        {% else %}
+         <span class="font-bold">Oncall: </span> {% if account_profile.on_call_person %} <i class="fa-solid fa-phone text-green-700"></i> {% else %} <i class="fa-solid fa-phone-slash text-red-700"></i> {% endif %}
+        {% endif %}
+       </div>
+       <div class="w-0 border border-gray-300">
+         
+       </div>
+       <div class="w-1/2 text-center">
+          <span class="font-bold">Manager: </span> {% if account_profile.department_manager %} <i class="fa-solid fa-square-check text-green-700"></i> {% else %} <i class="fa-solid fa-x text-red-700" text-red-700></i> {% endif %}
+       </div>
+       
+     </div>
+     
+  </div>
+</div>
+
+
+<script>
+
+$(document).ready(function(){
+    $("#oncall").on("change", "input:checkbox", function(){
+        $("#oncall").submit();
+    });
+});
+
+</script>
+
+{% endblock content %}

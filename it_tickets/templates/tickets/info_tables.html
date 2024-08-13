@@ -1,0 +1,245 @@
+{% extends "tickets/base.html" %}
+{% block content %}
+
+
+<form class="max-w-sm mx-auto py-10" method="GET">
+  <label for="department" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select a department</label>
+  <select name="select_department" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    <option selected>all</option>
+    {% for department in departments %}
+    <option value="{{department.pk}}">{{department.name}}</option>
+
+    {% endfor %}
+  </select>
+<div class="py-5">
+<button
+  type="submit"
+  class="inline-block rounded bg-primary px-4 pb-[5px] pt-[6px] text-xs font-medium uppercase leading-normal text-white shadow-primary-3 transition duration-150 ease-in-out hover:bg-primary-accent-300 hover:shadow-primary-2 focus:bg-primary-accent-300 focus:shadow-primary-2 focus:outline-none focus:ring-0 active:bg-primary-600 active:shadow-primary-2 motion-reduce:transition-none dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong">
+  submit
+</button>
+</div>
+</form>
+
+
+
+<div class="grid grid-cols-2 gap-2">
+<div>
+    <div class="text-center  text-lg font-semibold py-4"><i>Opened tickets</i></div>
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        Ticket
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Status
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Priority
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Department
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Opened
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for opened_ticket in opened_tickets%}
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                       <a href="{% url 'ticket_detail' opened_ticket.pk %}"> {{opened_ticket.ticket_id}} </a>
+                    </th>
+                    <td class="px-6 py-4">
+                        {{opened_ticket.status}}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{opened_ticket.priority}}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{opened_ticket.resolver_department}}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{opened_ticket.opened}}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div> 
+    
+{% if opened_tickets.has_other_pages %}
+<nav aria-label="Page navigation example" class="py-8">
+  <ul class="list-style-none flex">
+  {% if opened_tickets.has_previous %}
+    <li>
+      <a
+        class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-surface transition duration-300 hover:bg-neutral-100 focus:bg-neutral-100 focus:text-primary-700 focus:outline-none focus:ring-0 active:bg-neutral-100 active:text-primary-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:focus:text-primary-500 dark:active:bg-neutral-700 dark:active:text-primary-500"
+        href="?page1={{ opened_tickets.previous_page_number }}{% if request.GET.select_department %}&select_department={{ request.GET.select_department }}{% endif %}"
+        >Previous</a
+      >
+    </li>
+    {% endif %}
+    {% for num in opened_tickets.paginator.page_range %}
+        {% if opened_tickets.number == num %}
+            <li>
+            <a
+                class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-surface transition duration-300 hover:bg-neutral-100 focus:bg-neutral-100 focus:text-primary-700 focus:outline-none active:bg-neutral-100 active:text-primary-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:focus:text-primary-500 dark:active:bg-neutral-700 dark:active:text-primary-500"
+                href="">{{ num }}</a>
+            </li>
+        {% else %}
+
+        <li>
+        <a
+            class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-surface transition duration-300 hover:bg-neutral-100 focus:bg-neutral-100 focus:text-primary-700 focus:outline-none active:bg-neutral-100 active:text-primary-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:focus:text-primary-500 dark:active:bg-neutral-700 dark:active:text-primary-500"
+            href="?page1={{ num }}{% if request.GET.select_department %}&select_department={{ request.GET.select_department }}{% endif %}">{{ num }}</a>
+        </li>
+        
+        {% endif %}
+    {% endfor %}
+   {% if opened_tickets.has_next %}
+    <li>
+      <a
+        class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-surface transition duration-300 hover:bg-neutral-100 focus:bg-neutral-100 focus:text-primary-700 focus:outline-none active:bg-neutral-100 active:text-primary-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:focus:text-primary-500 dark:active:bg-neutral-700 dark:active:text-primary-500"
+        href="?page1={{ opened_tickets.next_page_number }}{% if request.GET.select_department %}&select_department={{ request.GET.select_department }}{% endif %}"
+        >Next</a>
+    </li>
+    {% else %}
+
+    <li>
+      <a
+        class="disabled relative block rounded bg-transparent px-3 py-1.5 text-sm text-surface transition duration-300 hover:bg-neutral-100 focus:bg-neutral-100 focus:text-primary-700 focus:outline-none active:bg-neutral-100 active:text-primary-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:focus:text-primary-500 dark:active:bg-neutral-700 dark:active:text-primary-500"
+        href=""
+        ></a>
+    </li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}
+
+</div>
+
+
+
+
+
+
+
+
+
+
+<div>
+
+    <div class="text-center  text-lg  font-semibold py-4 "><i>Closed tickets</i></div>
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        Ticket
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Status
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Priority
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Department
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Opened
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for closed_ticket in closed_tickest%}
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                       <a href={% url 'ticket_detail' closed_ticket.pk %}> {{closed_ticket.ticket_id}}</a>
+                    </th>
+                    <td class="px-6 py-4">
+                        {{closed_ticket.status}}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{closed_ticket.priority}}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{closed_ticket.resolver_department}}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{closed_ticket.opened}}
+                    </td>
+                </tr>
+                {% endfor %}
+            
+            </tbody>
+        </table>
+    </div>
+
+
+
+{% if closed_tickest.has_other_pages %}
+<nav aria-label="Page navigation example" class="py-8">
+  <ul class="list-style-none flex">
+  {% if tickets.has_previous %}
+    <li>
+      <a
+        class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-surface transition duration-300 hover:bg-neutral-100 focus:bg-neutral-100 focus:text-primary-700 focus:outline-none focus:ring-0 active:bg-neutral-100 active:text-primary-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:focus:text-primary-500 dark:active:bg-neutral-700 dark:active:text-primary-500"
+        href="?page2={{ closed_tickest.previous_page_number }}{% if request.GET.select_department %}&select_department={{ request.GET.select_department }}{% endif %}"
+        >Previous</a
+      >
+    </li>
+    {% endif %}
+    {% for num in closed_tickest.paginator.page_range %}
+        {% if closed_tickest.number == num %}
+            <li>
+            <a
+                class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-surface transition duration-300 hover:bg-neutral-100 focus:bg-neutral-100 focus:text-primary-700 focus:outline-none active:bg-neutral-100 active:text-primary-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:focus:text-primary-500 dark:active:bg-neutral-700 dark:active:text-primary-500"
+                href="">{{ num }}</a>
+            </li>
+        {% else %}
+
+        <li>
+        <a
+            class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-surface transition duration-300 hover:bg-neutral-100 focus:bg-neutral-100 focus:text-primary-700 focus:outline-none active:bg-neutral-100 active:text-primary-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:focus:text-primary-500 dark:active:bg-neutral-700 dark:active:text-primary-500"
+            href="?page2={{ num }}{% if request.GET.select_department %}&select_department={{ request.GET.select_department }}{% endif %}">{{ num }}</a>
+        </li>
+        
+        {% endif %}
+    {% endfor %}
+   {% if closed_tickest.has_next %}
+    <li>
+      <a
+        class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-surface transition duration-300 hover:bg-neutral-100 focus:bg-neutral-100 focus:text-primary-700 focus:outline-none active:bg-neutral-100 active:text-primary-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:focus:text-primary-500 dark:active:bg-neutral-700 dark:active:text-primary-500"
+        href="?page2={{ closed_tickest.next_page_number }}{% if request.GET.select_department %}&select_department={{ request.GET.select_department }}{% endif %}"
+        >Next</a>
+    </li>
+    {% else %}
+
+    <li>
+      <a
+        class="disabled relative block rounded bg-transparent px-3 py-1.5 text-sm text-surface transition duration-300 hover:bg-neutral-100 focus:bg-neutral-100 focus:text-primary-700 focus:outline-none active:bg-neutral-100 active:text-primary-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:focus:text-primary-500 dark:active:bg-neutral-700 dark:active:text-primary-500"
+        href=""
+        ></a>
+    </li>
+    {% endif %}
+  </ul>
+</nav>
+
+
+{% endif %}
+</div>
+</div>
+<div class="py-8">
+<a href={% url 'home' %}  class="text-white  bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">back</a>
+</div>
+{% endblock content %}

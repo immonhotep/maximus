@@ -1,0 +1,57 @@
+{% extends "tickets/base.html" %}
+ {% block content %}
+ {% if request.user.is_authenticated %}
+<h3 class="text-3xl font-medium text-gray-700">User Dashboard</h3>
+    
+                    <div class="mt-4">
+                        <div class="flex flex-wrap -mx-6">
+                            <div class="w-full px-6 sm:w-1/2 xl:w-1/3">
+                                <div class="flex items-center px-5 py-6 bg-white rounded-md shadow-sm">
+                                    <div class="p-3 bg-red-600 bg-opacity-75 rounded-full">
+                                        <i class="fa-solid fa-bug fa-lg"></i>
+                                    </div>
+    
+                                    <div class="mx-5">
+                                        <a href={% url 'send_ticket' %}><div class="bg-red-600 bg-opacity-75 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-600  hover:border-red-500 rounded" >Send Ticket</div></a>
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <div class="w-full px-6 mt-6 sm:w-1/2 xl:w-1/3 sm:mt-0">
+                                <div class="flex items-center px-5 py-6 bg-white rounded-md shadow-sm">
+                                    <div class="p-3 bg-blue-600 bg-opacity-75 rounded-full">
+                                        <i class="fa-solid fa-users fa-lg"></i>
+                                    </div>
+    
+                                    <div class="mx-5">
+                                        
+                                        <a href={% url 'department_queue' %}><div class="bg-blue-600 bg-opacity-75 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-600  hover:border-blue-500 rounded" >Department Tickets</div></a>
+                                    </div>
+
+                    
+                                </div>
+                            </div>
+    
+                            <div class="w-full px-6 mt-6 sm:w-1/2 xl:w-1/3 xl:mt-0">
+                                <div class="flex items-center px-5 py-6 bg-white rounded-md shadow-sm">
+                                    <div class="p-3 bg-emerald-600 bg-opacity-75 rounded-full">
+                                       <i class="fa-solid fa-user fa-lg"></i>
+                                    </div>
+    
+                                    <div class="mx-5">
+                                         <a href={% url 'my_queue' %}><div class="bg-emerald-600 bg-opacity-75 hover:bg-emerald-400 text-white font-bold py-2 px-4 border-b-4 border-emerald-600  hover:border-emerald-500 rounded" >My tickets</div></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+<div class="text-center py-10" ><h3>{{request.user.profile.department}}</h3></div>
+
+
+{%  include 'tickets/user_chart.html' %}
+
+
+
+{% endif %}
+{% endblock content %}

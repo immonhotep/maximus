@@ -1,0 +1,508 @@
+{% extends "tickets/base.html" %}
+ {% block content %}
+
+
+
+<div
+  class="block w-full rounded-lg bg-white text-center text-surface shadow-secondary-1 dark:bg-surface-dark dark:text-white">
+  <div class="border-b-2 border-neutral-100 p-3 dark:border-white/10">
+    <!--Pills navigation-->
+    <ul
+      class="flex list-none flex-col flex-wrap ps-0 md:flex-row"
+      id="pills-tab"
+      role="tablist"
+      data-twe-nav-ref>
+      {% if request.user.profile.department_manager and request.user.profile.department == ticket.resolver_department and ticket.status == "RESOLVED"%}
+      <li role="presentation">
+        <button
+        type="button"
+        class="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-primary-3 transition duration-150 ease-in-out hover:bg-primary-accent-300 hover:shadow-primary-2 focus:bg-primary-accent-300 focus:shadow-primary-2 focus:outline-none focus:ring-0 active:bg-primary-600 active:shadow-primary-2 dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong"
+        data-twe-toggle="modal"
+        data-twe-target="#CloseModal-{{ticket.pk}}"
+        data-twe-ripple-init
+        data-twe-ripple-color="light">
+        <i class="fa-solid fa-square-check fa-2x" data-twe-toggle="tooltip" title="close"></i>
+        </button>
+
+
+                <!-- CloseModal -->
+        <div
+          data-twe-modal-init
+          class="fixed left-0 top-0 z-[1055] hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none"
+          id="CloseModal-{{ticket.pk}}"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true">
+          <div
+            data-twe-modal-dialog-ref
+            class="pointer-events-none relative w-auto translate-y-[-50px] opacity-0 transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:max-w-[500px]">
+            <div
+              class="pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-4 outline-none dark:bg-surface-dark">
+              <div
+                class="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 p-4 dark:border-white/10">
+                <h5
+                  class="text-xl font-medium leading-normal text-surface dark:text-white"
+                  id="exampleModalLabel">
+                  Ticket close
+                </h5>
+                <button
+                  type="button"
+                  class="box-content rounded-none border-none text-neutral-500 hover:text-neutral-800 hover:no-underline focus:text-neutral-800 focus:opacity-100 focus:shadow-none focus:outline-none dark:text-neutral-400 dark:hover:text-neutral-300 dark:focus:text-neutral-300"
+                  data-twe-modal-dismiss
+                  aria-label="Close">
+                  <span class="[&>svg]:h-6 [&>svg]:w-6">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor">
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </span>
+                </button>
+              </div>
+
+              <!-- CloseModal body -->
+              <form method = "POST" action="{% url 'ticket_close' ticket.pk %}">
+              {% csrf_token %}
+              <div class="relative flex-auto p-4" data-twe-modal-body-ref>
+                Do you want to close this ticket: {{ticket.ticket_id}}
+
+              <!-- CloseModal footer -->
+              <div
+                class="flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t-2 border-neutral-100 p-4 dark:border-white/10">
+                <button
+                  type="button"
+                  class="inline-block rounded bg-primary-100 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-primary-700 transition duration-150 ease-in-out hover:bg-primary-accent-200 focus:bg-primary-accent-200 focus:outline-none focus:ring-0 active:bg-primary-accent-200 dark:bg-primary-300 dark:hover:bg-primary-400 dark:focus:bg-primary-400 dark:active:bg-primary-400"
+                  data-twe-modal-dismiss
+                  data-twe-ripple-init
+                  data-twe-ripple-color="light">
+                  Back
+                </button>
+                <button
+                  name="close_ticket"
+                  value="Close"
+                  type="submit"
+                  class="ms-1 inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-primary-3 transition duration-150 ease-in-out hover:bg-primary-accent-300 hover:shadow-primary-2 focus:bg-primary-accent-300 focus:shadow-primary-2 focus:outline-none focus:ring-0 active:bg-primary-600 active:shadow-primary-2 dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong"
+                  data-twe-ripple-init
+                  data-twe-ripple-color="light">
+                  Ok
+                </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        
+      
+      </li>
+      {% endif %}
+
+      {% if ticket.status == "QUEUED" or ticket.status == "INPROGRESS" %}
+      {% if ticket.resolver_department == request.user.profile.department%}
+      <li role="presentation">
+
+        <button
+        type="button"
+        class="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-primary-3 transition duration-150 ease-in-out hover:bg-primary-accent-300 hover:shadow-primary-2 focus:bg-primary-accent-300 focus:shadow-primary-2 focus:outline-none focus:ring-0 active:bg-primary-600 active:shadow-primary-2 dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong"
+        data-twe-toggle="modal"
+        data-twe-target="#exampleModal-{{ticket.pk}}"
+        data-twe-ripple-init
+        data-twe-ripple-color="light">
+        <i class="fa-regular fa-circle-user" data-twe-toggle="tooltip" title="Assign to person"></i>
+        </button>
+      </li>
+
+      <!-- Modal -->
+<div
+  data-twe-modal-init
+  class="fixed left-0 top-0 z-[1055] hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none"
+  id="exampleModal-{{ticket.pk}}"
+  data-twe-backdrop="static"
+  data-twe-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true">
+  <div
+    data-twe-modal-dialog-ref
+    class="pointer-events-none relative w-auto translate-y-[-50px] opacity-0 transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:max-w-[500px]">
+    <div
+      class="pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-4 outline-none dark:bg-surface-dark">
+      <div
+        class="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 p-4 dark:border-white/10">
+        <!--Modal title-->
+        <h5
+          class="text-xl font-medium leading-normal text-surface dark:text-white"
+          id="exampleModalLabel">
+          Assign ticket to another user in your department
+        </h5>
+        <!-- Close button -->
+        <button
+          type="button"
+          class="box-content rounded-none border-none text-neutral-500 hover:text-neutral-800 hover:no-underline focus:text-neutral-800 focus:opacity-100 focus:shadow-none focus:outline-none dark:text-neutral-400 dark:hover:text-neutral-300 dark:focus:text-neutral-300"
+          data-twe-modal-dismiss
+          aria-label="Close">
+          <span class="[&>svg]:h-6 [&>svg]:w-6">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </span>
+        </button>
+      </div>
+
+      <!-- Modal body -->
+      <form method = "POST" action="{% url 'assign_to_person' ticket.pk %}">
+      {% csrf_token %}
+      <div
+        class="relative flex justify-center p-4"
+        data-twe-modal-body-ref>
+
+        <label for="profiles" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an option</label>
+        <select name="profiles" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+          {% for profile in profiles %}
+          <option value="{{profile.pk}}">{{profile}}</option>
+          {% endfor  %}
+       
+        </select>
+
+
+
+
+        
+      </div>
+
+      <!-- Modal footer -->
+      <div
+        class="flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t-2 border-neutral-100 p-4 dark:border-white/10">
+        <button
+          type="button"
+          class="inline-block rounded bg-primary-100 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-primary-700 transition duration-150 ease-in-out hover:bg-primary-accent-200 focus:bg-primary-accent-200 focus:outline-none focus:ring-0 active:bg-primary-accent-200 dark:bg-primary-300 dark:hover:bg-primary-400 dark:focus:bg-primary-400 dark:active:bg-primary-400"
+          data-twe-modal-dismiss
+          data-twe-ripple-init
+          data-twe-ripple-color="light">
+          Close
+        </button>
+        <button
+          type="submit"
+          class="ms-1 inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-primary-3 transition duration-150 ease-in-out hover:bg-primary-accent-300 hover:shadow-primary-2 focus:bg-primary-accent-300 focus:shadow-primary-2 focus:outline-none focus:ring-0 active:bg-primary-600 active:shadow-primary-2 dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong"
+          data-twe-ripple-init
+          data-twe-ripple-color="light">
+          Assign
+        </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+   <li role="presentation" class="px-2">
+
+
+        <button
+        type="button"
+        class="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-primary-3 transition duration-150 ease-in-out hover:bg-primary-accent-300 hover:shadow-primary-2 focus:bg-primary-accent-300 focus:shadow-primary-2 focus:outline-none focus:ring-0 active:bg-primary-600 active:shadow-primary-2 dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong"
+        data-twe-toggle="modal"
+        data-twe-target="#exampleModal2-{{ticket.pk}}"
+        data-twe-ripple-init
+        data-twe-ripple-color="light">
+        <i class="fa-solid fa-building-circle-arrow-right" data-twe-toggle="tooltip" title="Assign to department"></i>
+        </button>
+      </li>
+
+
+      <!-- Modal -->
+<div
+  data-twe-modal-init
+  class="fixed left-0 top-0 z-[1055] hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none"
+  id="exampleModal2-{{ticket.pk}}"
+  data-twe-backdrop="static"
+  data-twe-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true">
+  <div
+    data-twe-modal-dialog-ref
+    class="pointer-events-none relative w-auto translate-y-[-50px] opacity-0 transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:max-w-[500px]">
+    <div
+      class="pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-4 outline-none dark:bg-surface-dark">
+      <div
+        class="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 p-4 dark:border-white/10">
+        <!--Modal title-->
+        <h5
+          class="text-xl font-medium leading-normal text-surface dark:text-white"
+          id="exampleModalLabel">
+          Assign ticket to another department
+        </h5>
+        <!-- Close button -->
+        <button
+          type="button"
+          class="box-content rounded-none border-none text-neutral-500 hover:text-neutral-800 hover:no-underline focus:text-neutral-800 focus:opacity-100 focus:shadow-none focus:outline-none dark:text-neutral-400 dark:hover:text-neutral-300 dark:focus:text-neutral-300"
+          data-twe-modal-dismiss
+          aria-label="Close">
+          <span class="[&>svg]:h-6 [&>svg]:w-6">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </span>
+        </button>
+      </div>
+
+      <!-- Modal body -->
+      <form method = "POST" action="{% url 'assign_to_department' ticket.pk %}">
+      {% csrf_token %}
+      <div
+        class="relative flex justify-center p-4"
+        data-twe-modal-body-ref>
+
+          <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an option</label>
+          <select name="departments" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+             {% for department in departments %}
+            <option value="{{department.pk}}">{{department}}</option>
+            {% endfor %}
+          
+          </select>
+
+
+ 
+      </div>
+
+      <!-- Modal footer -->
+      <div
+        class="flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t-2 border-neutral-100 p-4 dark:border-white/10">
+        <button
+          type="button"
+          class="inline-block rounded bg-primary-100 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-primary-700 transition duration-150 ease-in-out hover:bg-primary-accent-200 focus:bg-primary-accent-200 focus:outline-none focus:ring-0 active:bg-primary-accent-200 dark:bg-primary-300 dark:hover:bg-primary-400 dark:focus:bg-primary-400 dark:active:bg-primary-400"
+          data-twe-modal-dismiss
+          data-twe-ripple-init
+          data-twe-ripple-color="light">
+          Close
+        </button>
+        <button
+          type="submit"
+          class="ms-1 inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-primary-3 transition duration-150 ease-in-out hover:bg-primary-accent-300 hover:shadow-primary-2 focus:bg-primary-accent-300 focus:shadow-primary-2 focus:outline-none focus:ring-0 active:bg-primary-600 active:shadow-primary-2 dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong"
+          data-twe-ripple-init
+          data-twe-ripple-color="light">
+          Assing
+        </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+      {% endif%}
+      {% endif %}
+    </ul>
+  </div>
+
+  <div class="p-6">
+    <h5 class="mb-2 text-xl font-medium leading-tight">
+      {{ticket.ticket_id}}
+    </h5>
+    <hr>
+    <h6 class="text-left py-3 ">Ticket description:</h6>
+    <p class="mb-4 text-base text-left">
+     {{ticket.ticket_description}}
+    </p>
+    <hr>
+
+
+
+
+
+<div class="flex flex-col">
+  <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
+    <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+      <div class="overflow-hidden">
+        <table
+          class="min-w-full text-center text-sm font-light text-surface dark:text-white">
+          <thead
+            class="border-b border-neutral-200 font-medium dark:border-white/10">
+            <tr>
+              <th scope="col" class="px-6 py-2">Resolver User:</th>
+              <th scope="col" class="px-6 py-2">Resolver Department:</th>
+              <th scope="col" class="px-6 py-2">Customer:</th>
+              <th scope="col" class="px-6 py-2">Priority</th>
+              <th scope="col" class="px-6 py-2">Status</th>
+              <th scope="col" class="px-6 py-2">Dispacher department</th>
+              <th scope="col" class="px-6 py-2">Dispatcher</th>
+              <th scope="col" class="px-6 py-2">Opened</th>
+              <th scope="col" class="px-6 py-2">Updated</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-neutral-200 dark:border-white/10">
+              <td class="whitespace-nowrap px-6 py-2 font-medium">{% if ticket.resolver_profile %} {{ticket.resolver_profile}} {% else %} Not assigned {% endif %}</td>
+              <td class="whitespace-nowrap px-6 py-2">{{ticket.resolver_department.short_name}}</td>
+              <td class="whitespace-nowrap px-6 py-2">{{ticket.customer.short_name}}</td>
+              <td class="whitespace-nowrap px-6 py-2">{{ticket.priority}}</td>
+              <td class="whitespace-nowrap px-6 py-2">{{ticket.status}}</td>
+              <td class="whitespace-nowrap px-6 py-2">{{ticket.dispacher_department.short_name}}</td>
+              <td class="whitespace-nowrap px-6 py-2">{{ticket.dispacher_profile}}</td>
+              <td class="whitespace-nowrap px-6 py-2">{{ticket.opened}}</td>
+              <td class="whitespace-nowrap px-6 py-2">{{ticket.updated}}</td>
+            </tr>    
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if ticket.resolver_profile  == request.user.profile  and ticket.status != "CLOSED" %}
+
+    {% if not ticket.resolution_status %}
+
+        <form method="POST">
+        {% csrf_token %}
+        {{form}}
+
+        <!--radio-->
+
+        <div class="flex justify-center py-4">
+        <!--First radio-->
+        <div class="mb-[0.125rem] me-4 inline-block min-h-[1.5rem] ps-[1.5rem]">
+          <input
+            class="relative float-left -ms-[1.5rem] me-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-secondary-500 before:pointer-events-none before:absolute before:h-4 before:w-4 before:scale-0 before:rounded-full before:bg-transparent before:opacity-0 before:shadow-checkbox before:shadow-transparent before:content-[''] after:absolute after:z-[1] after:block after:h-4 after:w-4 after:rounded-full after:content-[''] checked:border-primary checked:before:opacity-[0.16] checked:after:absolute checked:after:left-1/2 checked:after:top-1/2 checked:after:h-[0.625rem] checked:after:w-[0.625rem] checked:after:rounded-full checked:after:border-primary checked:after:bg-primary checked:after:content-[''] checked:after:[transform:translate(-50%,-50%)] hover:cursor-pointer hover:before:opacity-[0.04] hover:before:shadow-black/60 focus:shadow-none focus:outline-none focus:ring-0 focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-black/60 focus:before:transition-[box-shadow_0.2s,transform_0.2s] checked:focus:border-primary checked:focus:before:scale-100 checked:focus:before:shadow-checkbox checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] rtl:float-right dark:border-neutral-400 dark:checked:border-primary"
+            type="radio"
+            name="inlineRadioOptions"
+            id="inlineRadio1"
+            value="Resolve" />
+          <label
+            class="mt-px inline-block ps-[0.15rem] hover:cursor-pointer"
+            for="inlineRadio1">Resolve</label>
+        </div>
+
+        <!--Second radio-->
+        <div class="mb-[0.125rem] me-4 inline-block min-h-[1.5rem] ps-[1.5rem]">
+          <input
+            class="relative float-left -ms-[1.5rem] me-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-secondary-500 before:pointer-events-none before:absolute before:h-4 before:w-4 before:scale-0 before:rounded-full before:bg-transparent before:opacity-0 before:shadow-checkbox before:shadow-transparent before:content-[''] after:absolute after:z-[1] after:block after:h-4 after:w-4 after:rounded-full after:content-[''] checked:border-primary checked:before:opacity-[0.16] checked:after:absolute checked:after:left-1/2 checked:after:top-1/2 checked:after:h-[0.625rem] checked:after:w-[0.625rem] checked:after:rounded-full checked:after:border-primary checked:after:bg-primary checked:after:content-[''] checked:after:[transform:translate(-50%,-50%)] hover:cursor-pointer hover:before:opacity-[0.04] hover:before:shadow-black/60 focus:shadow-none focus:outline-none focus:ring-0 focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-black/60 focus:before:transition-[box-shadow_0.2s,transform_0.2s] checked:focus:border-primary checked:focus:before:scale-100 checked:focus:before:shadow-checkbox checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] rtl:float-right dark:border-neutral-400 dark:checked:border-primary"
+            type="radio"
+            name="inlineRadioOptions"
+            id="inlineRadio2"
+            value="Update"  checked/>
+          <label
+            class="mt-px inline-block ps-[0.15rem] hover:cursor-pointer"
+            for="inlineRadio2">Update</label>
+        </div>
+      </div>
+
+              
+              <div class="py-4">
+              <button type="submit" class="inline-block rounded bg-success px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-success-3 transition duration-150 ease-in-out hover:bg-success-accent-300 hover:shadow-success-2 focus:bg-success-accent-300 focus:shadow-success-2 focus:outline-none focus:ring-0 active:bg-success-600 active:shadow-success-2 motion-reduce:transition-none dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong">submit</button>
+              </div>
+              </form>
+
+    {% else %}
+
+        <div
+          class="block max-w-100 rounded-lg border border-success-600 bg-transparent text-surface shadow-secondary-1 dark:bg-surface-dark dark:text-white">
+          <div class="border-b-2 border-success-600 px-6 py-3">
+
+          <h5 class="mb-2 text-xl font-medium leading-tight text-success-600">
+              Ticket Resolution status:
+            </h5>
+          </div>
+          <div class="p-6">
+          <form method="POST">
+                {% csrf_token %}
+                {{form}}
+
+                <!--radio-->
+
+          <div class="flex justify-center py-4">
+          <!--First radio-->
+          <div class="mb-[0.125rem] me-4 inline-block min-h-[1.5rem] ps-[1.5rem]">
+            <input
+              class="relative float-left -ms-[1.5rem] me-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-secondary-500 before:pointer-events-none before:absolute before:h-4 before:w-4 before:scale-0 before:rounded-full before:bg-transparent before:opacity-0 before:shadow-checkbox before:shadow-transparent before:content-[''] after:absolute after:z-[1] after:block after:h-4 after:w-4 after:rounded-full after:content-[''] checked:border-primary checked:before:opacity-[0.16] checked:after:absolute checked:after:left-1/2 checked:after:top-1/2 checked:after:h-[0.625rem] checked:after:w-[0.625rem] checked:after:rounded-full checked:after:border-primary checked:after:bg-primary checked:after:content-[''] checked:after:[transform:translate(-50%,-50%)] hover:cursor-pointer hover:before:opacity-[0.04] hover:before:shadow-black/60 focus:shadow-none focus:outline-none focus:ring-0 focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-black/60 focus:before:transition-[box-shadow_0.2s,transform_0.2s] checked:focus:border-primary checked:focus:before:scale-100 checked:focus:before:shadow-checkbox checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] rtl:float-right dark:border-neutral-400 dark:checked:border-primary"
+              type="radio"
+              name="inlineRadioOptions"
+              id="inlineRadio1"
+              value="Resolve" />
+            <label
+              class="mt-px inline-block ps-[0.15rem] hover:cursor-pointer"
+              for="inlineRadio1">Resolve</label>
+          </div>
+
+          <!--Second radio-->
+          <div class="mb-[0.125rem] me-4 inline-block min-h-[1.5rem] ps-[1.5rem]">
+            <input
+              class="relative float-left -ms-[1.5rem] me-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-secondary-500 before:pointer-events-none before:absolute before:h-4 before:w-4 before:scale-0 before:rounded-full before:bg-transparent before:opacity-0 before:shadow-checkbox before:shadow-transparent before:content-[''] after:absolute after:z-[1] after:block after:h-4 after:w-4 after:rounded-full after:content-[''] checked:border-primary checked:before:opacity-[0.16] checked:after:absolute checked:after:left-1/2 checked:after:top-1/2 checked:after:h-[0.625rem] checked:after:w-[0.625rem] checked:after:rounded-full checked:after:border-primary checked:after:bg-primary checked:after:content-[''] checked:after:[transform:translate(-50%,-50%)] hover:cursor-pointer hover:before:opacity-[0.04] hover:before:shadow-black/60 focus:shadow-none focus:outline-none focus:ring-0 focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-black/60 focus:before:transition-[box-shadow_0.2s,transform_0.2s] checked:focus:border-primary checked:focus:before:scale-100 checked:focus:before:shadow-checkbox checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] rtl:float-right dark:border-neutral-400 dark:checked:border-primary"
+              type="radio"
+              name="inlineRadioOptions"
+              id="inlineRadio2"
+              value="Update"  checked/>
+            <label
+              class="mt-px inline-block ps-[0.15rem] hover:cursor-pointer"
+              for="inlineRadio2">Update</label>
+          </div>
+        </div>
+
+
+                <!--end randio-->
+              
+                <div class="py-4">
+                <button type="submit" class="inline-block rounded bg-success px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-success-3 transition duration-150 ease-in-out hover:bg-success-accent-300 hover:shadow-success-2 focus:bg-success-accent-300 focus:shadow-success-2 focus:outline-none focus:ring-0 active:bg-success-600 active:shadow-success-2 motion-reduce:transition-none dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong">update</button>
+                </div>
+                </form>
+        
+          </div>
+        </div>
+
+    {% endif %}
+    
+{% else %}
+
+  {% if  ticket.resolution_status %}
+  {{ticket.resolver_profile}} {{request.user.profile}}
+    <div class="border-b-2 border-success-600 px-6 py-3">
+
+    <h5 class="mb-2 text-xl font-medium leading-tight text-success-600">
+        Ticket Resolution status:
+      </h5>
+    </div>
+    <div class="p-6 text-left">
+
+        {{ticket.resolution_status|linebreaks}}
+          
+    </div>
+  </div>
+  {% else  %}
+  {{ticket.resolver_profile}} working on this ticket currently
+  {% endif %}
+{% endif %}
+
+{% endblock content %}

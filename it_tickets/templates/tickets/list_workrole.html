@@ -1,0 +1,51 @@
+{% extends "tickets/base.html" %}
+{% block content %}
+
+<h6 class="flex items-center text-2xl font-extrabold dark:text-white">List all<span class="bg-blue-100 text-blue-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-2">workroles</span></h6>
+
+
+
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg pt-4 mb-8">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">
+                    Workrole name
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    description
+                </th>
+                <th>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for workrole in workroles%}
+            <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    {{workrole.name}}
+                </th>
+                <td class="px-6 py-4">
+                   {{workrole.description}}
+                </td>
+                {% if request.user.is_superuser%}
+                <td class="px-6 py-4">
+                    <a
+                    href = {% url 'update_workrole' workrole.pk %}
+                    class="inline-block rounded-full bg-primary px-6 pb-2 pt-1.5 text-xs font-medium uppercase leading-normal text-white shadow-primary-3 transition duration-150 ease-in-out hover:bg-primary-accent-300 hover:shadow-primary-2 focus:bg-primary-accent-300 focus:shadow-primary-2 focus:outline-none focus:ring-0 active:bg-primary-600 active:shadow-primary-2 motion-reduce:transition-none dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong">
+                    Edit
+                </a> 
+                    
+                </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+                      
+        </tbody>
+    </table>
+</div>
+
+
+<a href={% url 'home' %}  class="text-white  bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">back</a>
+
+{% endblock content%}

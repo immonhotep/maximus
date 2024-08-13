@@ -1,0 +1,213 @@
+
+<div class="grid grid-cols-2 gap-2">
+
+  <div>
+
+      <div id="container py-6" style="width: 75%;">
+        <canvas id="queue_chart" data-url="{% url 'queue_chart' %}"></canvas>
+      </div>
+  </div>
+  
+
+
+  <div>
+
+    <div id="container py-6" style="width: 75%;">
+        <canvas id="inprog_chart" data-url="{% url 'inprog_chart' %}"></canvas>
+    </div>
+  </div>
+
+</div>
+
+
+<div class="grid grid-cols-2 gap-2">
+    
+
+  <div>
+    
+      <div id="container py-6" style="width: 75%;">
+        <canvas id="resolved_chart" data-url="{% url 'resolved_chart' %}"></canvas>
+      </div>
+  </div>
+  
+
+
+  <div>
+
+    <div id="container py-6" style="width: 75%;">
+        <canvas id="closed_chart" data-url="{% url 'closed_chart' %}"></canvas>
+    </div>
+  </div>
+
+</div>
+
+
+
+  <script>
+
+    $(function () {
+
+      var $queue_chart = $("#queue_chart");
+      $.ajax({
+        url: $queue_chart.data("url"),
+        success: function (data) {
+
+          var ctx = $queue_chart[0].getContext("2d");
+         
+          new Chart(ctx, {
+            type: 'pie',
+            data: {
+              labels: data.labels,
+              datasets: [{
+                label: 'amount',
+                backgroundColor: [
+                    '#85d4ef', '#e3e82d', '#f43f17', '#0c0301',
+                      ],
+                data: data.data
+                
+              }]          
+            },
+            options: {
+              responsive: true,
+              legend: {
+                position: 'top',
+              },
+              title: {
+                display: true,
+                text: 'Queued Chart'
+              }
+            }
+          });
+
+        }
+      });
+
+    });
+
+
+    $(function () {
+
+      var $inprog_chart = $("#inprog_chart");
+      $.ajax({
+        url: $inprog_chart.data("url"),
+        success: function (data) {
+
+          var ctx = $inprog_chart[0].getContext("2d");
+         
+          new Chart(ctx, {
+            type: 'pie',
+            data: {
+              labels: data.labels,
+              datasets: [{
+                label: 'Amount',
+                backgroundColor: [
+                      '#85d4ef', '#e3e82d', '#f43f17', '#0c0301',
+                      ],
+                data: data.data
+              }]          
+            },
+            options: {
+              responsive: true,
+              legend: {
+                position: 'top',
+              },
+              title: {
+                display: true,
+                text: 'Inprogress Chart'
+              }
+            }
+          });
+
+        }
+      });
+
+    });
+
+
+
+     $(function () {
+
+      var $resolved_chart = $("#resolved_chart");
+      $.ajax({
+        url: $resolved_chart.data("url"),
+        success: function (data) {
+
+          var ctx = $resolved_chart[0].getContext("2d");
+         
+          new Chart(ctx, {
+            type: 'pie',
+            data: {
+              labels: data.labels,
+              datasets: [{
+                label: 'Amount',
+                backgroundColor: [
+                      '#85d4ef', '#e3e82d', '#f43f17', '#0c0301',
+                      ],
+                data: data.data
+              }]          
+            },
+            options: {
+              responsive: true,
+              legend: {
+                position: 'top',
+              },
+              title: {
+                display: true,
+                text: 'Resolved Chart'
+              }
+            }
+          });
+
+        }
+      });
+
+    });
+
+
+
+         $(function () {
+
+      var $closed_chart = $("#closed_chart");
+      $.ajax({
+        url: $closed_chart.data("url"),
+        success: function (data) {
+
+          var ctx = $closed_chart[0].getContext("2d");
+         
+          new Chart(ctx, {
+            type: 'pie',
+            data: {
+              labels: data.labels,
+              datasets: [{
+                label: 'Amount',
+                backgroundColor: [
+                      '#85d4ef', '#e3e82d', '#f43f17', '#0c0301',
+                      ],
+                data: data.data
+              }]          
+            },
+            options: {
+              responsive: true,
+              legend: {
+                position: 'top',
+              },
+              title: {
+                display: true,
+                text: 'Closed Chart'
+              }
+            }
+          });
+
+        }
+      });
+
+    });
+
+
+  </script>
+
+
+
+
+
+ 

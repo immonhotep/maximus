@@ -1,0 +1,158 @@
+{% extends "tickets/base.html" %}
+ {% block content %}
+
+<h3 class="text-3xl font-medium text-gray-700">{% if request.user.is_superuser %} Site admin dashboard {% else %} Management Dashboard  {% endif %}</h3>
+    
+                    <div class="mt-4">
+                        <div class="flex flex-wrap -mx-6">
+                            <div class="w-full px-6 sm:w-1/2 xl:w-1/3">
+                                <div class="flex items-center px-5 py-6 bg-white rounded-md shadow-sm">
+                                    <div class="p-3 bg-purple-600 bg-opacity-75 rounded-full">
+                                        <i class="fa-solid fa-person-digging fa-lg"></i>
+                                    </div>
+                                    {% if request.user.is_superuser%}
+                                    <div class="mx-5">
+                                         <a href={% url 'create_workrole' %}><div class="bg-red-600 bg-opacity-75 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-600  hover:border-red-500 rounded" >Create Workrole</div></a>
+                                    </div>
+                                    {% endif %}
+
+                                     <div class="mx-5">
+                                         <a href={% url 'list_workrole' %}><div class="bg-purple-600 bg-opacity-75 hover:bg-purple-400 text-white font-bold py-2 px-4 border-b-4 border-purple-600  hover:border-purple-500 rounded" >List Workroles</div></a>
+                                    </div>
+                                </div>
+                                
+                            </div>
+    
+                            <div class="w-full px-6 mt-6 sm:w-1/2 xl:w-1/3 sm:mt-0">
+                                <div class="flex items-center px-5 py-6 bg-white rounded-md shadow-sm">
+                                    <div class="p-3 bg-blue-600 bg-opacity-75 rounded-full">
+                                        <i class="fa-solid fa-users fa-lg"></i>
+                                    </div>
+                                        
+                                    <div class="mx-5">
+                                        
+                                        <a href={% url 'list_users' %}><div class="bg-blue-600 bg-opacity-75 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-600  hover:border-blue-500 rounded" >List users</div></a>
+                                    </div>
+                                        <a href={% url 'list_department' %}><div class="bg-blue-600 bg-opacity-75 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-600  hover:border-blue-500 rounded" >List Department</div></a>
+                                    </div>
+                            </div>
+    
+                            <div class="w-full px-6 mt-6 sm:w-1/2 xl:w-1/3 xl:mt-0">
+                                <div class="flex items-center px-5 py-6 bg-white rounded-md shadow-sm">
+                                    <div class="p-3 bg-emerald-600 bg-opacity-75 rounded-full">
+                                       <i class="fa-solid fa-bugs fa-lg"></i>
+                                    </div>
+    
+                                    <div class="mx-5">
+                                         <a href={% url 'all_queue' %}><div class="bg-emerald-600 bg-opacity-75 hover:bg-emerald-400 text-white font-bold py-2 px-4 border-b-4 border-emerald-600  hover:border-emerald-500 rounded" >All tickets</div></a>
+                                    </div>
+
+                                    <div class="mx-5">
+                                         <a href={% url 'my_queue' %}><div class="bg-emerald-600 bg-opacity-75 hover:bg-emerald-400 text-white font-bold py-2 px-4 border-b-4 border-emerald-600  hover:border-emerald-500 rounded" >My tickets</div></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    
+                     <div class="mt-4">
+                        <div class="flex flex-wrap -mx-6">
+                            <div class="w-full px-6 sm:w-1/2 xl:w-1/3">
+                                <div class="flex items-center px-5 py-6 bg-white rounded-md shadow-sm">
+                                    <div class="p-3 bg-purple-600 bg-opacity-75 rounded-full">
+                                        <i class="fa-solid fa-people-line" fa-lg></i>
+                                    </div>
+                                    {% if request.user.is_superuser%}
+                                    <div class="mx-5">
+                                         <a href={% url 'create_customer' %}><div class="bg-red-600 bg-opacity-75 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-600  hover:border-red-500 rounded" >Create customer</div></a>
+                                    </div>
+                                    {% endif %}
+                                    <div class="mx-5">
+                                         <a href={% url 'list_customer' %}><div class="bg-purple-600 bg-opacity-75 hover:bg-purple-400 text-white font-bold py-2 px-4 border-b-4 border-purple-600  hover:border-purple-500 rounded" >List customer</div></a>
+                                    </div>
+                            
+
+
+
+                              
+                                   
+                                </div>
+                            </div>
+                            
+    
+                            <div class="w-full px-6 mt-6 sm:w-1/2 xl:w-1/3 sm:mt-0">
+                                <div class="flex items-center px-5 py-6 bg-white rounded-md shadow-sm">
+                                    <div class="p-3 bg-blue-600 bg-opacity-75 rounded-full">
+                                    {% if request.user.is_superuser %}
+                                        <i class="fa-solid fa-user-plus fa-lg"></i>
+                                    {% else %}
+                                        <i class="fa-solid fa-phone fa-lg"></i>
+                                    {% endif %}
+                                    </div>
+                                    {% if request.user.is_superuser %}
+                                    <div class="mx-5">
+                                        <a href={% url 'create_user' %}><div class="bg-red-600 bg-opacity-75 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-600  hover:border-red-500 rounded" >Create User</div></a>
+                                    </div>
+                                     <div class="mx-5">
+                                        
+                                        <a href={% url 'create_department' %}><div class="bg-red-600 bg-opacity-75 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-600  hover:border-red-500 rounded" >Create department</div></a>
+                                    </div>
+                                    {% else %}
+                                    <div class="mx-5">
+                                       <a href={% url 'list_oncall_all' %}><div class="bg-red-600 bg-opacity-75 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-600  hover:border-red-500 rounded" >Oncall all</div></a>
+                                    </div>
+                                    <div class="mx-5">
+                                       <a href={% url 'list_oncall_dep' %}><div class="bg-red-600 bg-opacity-75 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-600  hover:border-red-500 rounded" >Department oncall</div></a>
+                                    </div>
+                                    {% endif %}                               
+                                </div>
+                            </div>
+    
+                            <div class="w-full px-6 mt-6 sm:w-1/2 xl:w-1/3 xl:mt-0">
+                                <div class="flex items-center px-5 py-6 bg-white rounded-md shadow-sm">
+                                    <div class="p-3 bg-emerald-600 bg-opacity-75 rounded-full">
+                                       <i class="fa-solid fa-bug fa-lg"></i>
+                                    </div>
+                                    
+                                    
+                                    <div class="mx-5">
+                                        <a href={% url 'send_ticket' %}><div class="bg-red-600 bg-opacity-75 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-600  hover:border-red-500 rounded" >Send Ticket</div></a>
+                                    </div>
+                                     <div class="mx-5">
+                                        
+                                        <a href={% url 'department_queue' %}><div class="bg-emerald-600 bg-opacity-75 hover:bg-emerald-400 text-white font-bold py-2 px-4 border-b-4 border-emerald-600  hover:border-emerald-500 rounded" >Department Tickets</div></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+<form class="max-w-sm mx-auto py-10" method="POST">
+  {% csrf_token%}
+  <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select a department</label>
+  <select name="select_chart" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    <option selected>all</option>
+    {% for department in departments %}
+    <option value="{{department.pk}}">{{department.name}}</option>
+
+    {% endfor %}
+  </select>
+<div class="py-5">
+<button
+  type="submit"
+  class="inline-block rounded bg-primary px-4 pb-[5px] pt-[6px] text-xs font-medium uppercase leading-normal text-white shadow-primary-3 transition duration-150 ease-in-out hover:bg-primary-accent-300 hover:shadow-primary-2 focus:bg-primary-accent-300 focus:shadow-primary-2 focus:outline-none focus:ring-0 active:bg-primary-600 active:shadow-primary-2 motion-reduce:transition-none dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong">
+  submit
+</button>
+</div>
+</form>
+
+
+
+
+{% include "tickets/admin_chart.html" %}
+
+{% endblock content %}

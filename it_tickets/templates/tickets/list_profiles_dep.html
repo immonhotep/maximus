@@ -1,0 +1,99 @@
+{% extends "tickets/base.html" %}
+ {% block content %}
+
+
+<h6 class="flex items-center text-2xl font-extrabold dark:text-white">{% if oncall_all %} All oncall {% elif oncall_dep %}  {{request.user.profile.department}} oncall{% else %} {{request.user.profile.department}} {% endif %} <span class="bg-blue-100 text-blue-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-2">users</span></h6>
+<form method="POST" enctype="multipart/form-data">
+<div class="flex flex-col mt-2">
+  <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
+    <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+      <div class="overflow-hidden">
+        <table
+          class="min-w-full text-center text-sm font-light text-surface dark:text-white">
+          <thead
+            class="border-b border-neutral-200 bg-[#092063] font-medium text-white dark:border-white/10">
+            <tr>
+              <th scope="col" class=" px-6 py-4">Avatar</th>
+              <th scope="col" class=" px-6 py-4">username</th>
+              <th scope="col" class=" px-6 py-4">Name</th>
+              <th scope="col" class=" px-6 py-4">Role</th>
+              <th scope="col" class=" px-6 py-4">Department</th>
+              <th scope="col" class=" px-0 py-4">Oncall</th>
+              <th scope="col" class=" px-0 py-4"></th>
+              
+
+            </tr>
+          </thead>
+          <tbody>
+          {% for profile in dep_profiles%}
+            <tr class="border-b border-neutral-200 dark:border-white/10">
+              <td class="whitespace-nowrap  px-6 py-4 font-medium">
+
+              <div class="flex-shrink-0 w-10 h-10">
+                <a href="{% url 'show_account' profile.pk %}">
+                <img class="w-10 h-10 rounded-full"
+                src="{{profile.avatar.url}}"></a>
+                {% if not user.is_active %}<p class="text-center"> Inactive </p> {% endif %}
+              </div>
+               
+              </td>
+              <td class="whitespace-nowrap  px-6 py-4 font-medium">{{profile.user.username}}</td>
+              <td class="whitespace-nowrap  px-6 py-4">{{profile.user.first_name}}-{{profile.user.last_name}}</td>
+              <td class="whitespace-nowrap  px-6 py-4">{{profile.workrole.all|join:", " }}</td>
+              <td class="whitespace-nowrap  px-6 py-4">{{profile.department}}</td>
+              <td class="whitespace-nowrap  px-6 py-4">{% if profile.on_call_person %} 
+              <i
+              
+              class="inline-block rounded  px-7 pb-2.5 pt-3 text-sm font-medium uppercase leading-normal text-white"
+              data-twe-toggle="popover"
+              data-twe-title="Oncall Active"
+              data-twe-content="Phone number: {{profile.user.phone}}"
+              data-twe-ripple-init
+              data-twe-ripple-color="light">
+              <i class="fa-solid fa-phone fa-lg text-green-700">
+            </i>
+              
+               {% else %} <i class="fa-solid fa-phone-slash fa-lg text-red-700"></i> {% endif %}</td>
+          </tbody>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav aria-label="Page navigation example" class="py-8">
+  <ul class="list-style-none flex">
+  {% if dep_profiles.has_previous %}
+    <li>
+      <a
+        class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-surface transition duration-300 hover:bg-neutral-100 focus:bg-neutral-100 focus:text-primary-700 focus:outline-none focus:ring-0 active:bg-neutral-100 active:text-primary-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:focus:text-primary-500 dark:active:bg-neutral-700 dark:active:text-primary-500"
+        href="?page={{dep_profiles.previous_page_number}}"
+        >Previous</a
+      >
+    </li>
+    {% endif %}
+    {% for page  in dep_profiles.paginator.page_range %}
+    <li>
+      <a
+        class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-surface transition duration-300 hover:bg-neutral-100 focus:bg-neutral-100 focus:text-primary-700 focus:outline-none active:bg-neutral-100 active:text-primary-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:focus:text-primary-500 dark:active:bg-neutral-700 dark:active:text-primary-500"
+        href="?page={{page}}">{{page}}</a>
+    </li>
+    {% endfor %}
+   {% if dep_profiles.has_next %}
+    <li>
+      <a
+        class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-surface transition duration-300 hover:bg-neutral-100 focus:bg-neutral-100 focus:text-primary-700 focus:outline-none active:bg-neutral-100 active:text-primary-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:focus:text-primary-500 dark:active:bg-neutral-700 dark:active:text-primary-500"
+        href="?page={{dep_profiles.next_page_number}}"
+        >Next</a>
+    </li>
+    {% endif %}
+  </ul>
+</nav>
+
+
+<a href={% url 'home' %}  class="text-white  bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">back</a>
+{% endblock content %}

@@ -1,0 +1,477 @@
+ {% extends "tickets/base.html" %}
+ {% block content %}
+                
+
+                
+                    
+                    <h6 class="flex items-center text-2xl font-extrabold dark:text-white">{% if  own  %} {{request.user.username}} {% elif group %} {{request.user.profile.department}} {% elif all %} All {% elif search%} Search {% endif %}<span class="bg-blue-100 text-blue-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-2">tickets</span></h6>
+                
+                    
+                <!-- radios -->
+
+                    {% if all %}
+                    <form method="GET">
+                    
+                    <h3 class="mb-4 font-semibold text-gray-900 dark:text-white">select</h3>
+                    <ul class="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+                            <div class="flex items-center ps-3">
+                                <input id="radio1" type="radio" value="INFO" name="list_radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                <label for="horizontal-list-radio-license" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">INFO </label>
+                            </div>
+                        </li>
+                        <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+                            <div class="flex items-center ps-3">
+                                <input id="radio2" type="radio" value="WARNING" name="list_radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                <label for="horizontal-list-radio-id" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">WARNING</label>
+                            </div>
+                        </li>
+                        <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+                            <div class="flex items-center ps-3">
+                                <input id="radio3" type="radio" value="CRITICAL" name="list_radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                <label for="horizontal-list-radio-military" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">CRITICAL</label>
+                            </div>
+                        </li>
+                        <li class="w-full dark:border-gray-600">
+                            <div class="flex items-center ps-3">
+                                <input id="radio4" type="radio" value="FATAL" name="list_radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                <label for="horizontal-list-radio-passport" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">FATAL</label>
+                            </div>
+                        </li>
+
+                        <li class="w-full dark:border-gray-600">
+                            <div class="flex items-center ps-3">
+                                <input id="radio5" type="radio" value="ALL" name="list_radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                <label for="horizontal-list-radio-passport" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">ALL</label>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="flex justify-center py-4">
+                        <button
+                        type="submit"
+                        class="inline-block rounded bg-primary px-4 pb-[5px] pt-[6px] text-xs font-medium uppercase leading-normal text-white shadow-primary-3 transition duration-150 ease-in-out hover:bg-primary-accent-300 hover:shadow-primary-2 focus:bg-primary-accent-300 focus:shadow-primary-2 focus:outline-none focus:ring-0 active:bg-primary-600 active:shadow-primary-2 motion-reduce:transition-none dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong">
+                        order by
+                        </button>
+                                            
+                    </div>
+                    </form>
+                    {% endif %}
+
+                    {% if request.user.is_superuser or request.user.profile.department_manager %}
+                        {% if all %}
+                         <a
+                          data-twe-target="tooltip"
+                          title="Export tickets to csv"
+                        href={% url 'export_tickets_csv' %}
+                        class="inline-block rounded bg-primary px-4 pb-[5px] pt-[6px] text-xs font-medium uppercase leading-normal text-white shadow-primary-3 transition duration-150 ease-in-out hover:bg-primary-accent-300 hover:shadow-primary-2 focus:bg-primary-accent-300 focus:shadow-primary-2 focus:outline-none focus:ring-0 active:bg-primary-600 active:shadow-primary-2 motion-reduce:transition-none dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong">
+                        <i class="fa-solid fa-file-csv"></i>
+                        </a>
+                        {% endif %}
+                    {% endif %}
+
+
+
+
+
+
+                <!-- radios-->
+
+
+                     
+    
+                    <div class="flex flex-col mt-8">
+                        <div class="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+                            <div
+                                class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow sm:rounded-lg">
+                                <table class="min-w-full">
+                                    <thead>
+                                        <tr>
+                                            <th
+                                                class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                                                Resolver Name</th>
+                                            <th
+                                                class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                                                Ticket</th>
+
+                                             <th
+                                                class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                                                Customer</th>
+                                            <th
+                                                class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                                                Status</th>
+                                            <th
+                                                class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                                                Priority</th>
+
+                                            <th
+                                                class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                                                Department</th>
+
+                                            
+
+                                            <th
+                                                class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                                                Title</th>
+
+                                            <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    {% for ticket in tickets  %}
+                                    <tbody class="bg-white">
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                                <div class="flex items-center">
+                                                {% if ticket.resolver_profile%}
+                                                    <div class="flex-shrink-0 w-10 h-10">
+                                                        <img class="w-10 h-10 rounded-full"
+                                                            src="{{ticket.resolver_profile.avatar.url}}"
+                                                            
+                                                            >
+                                                    </div>
+    
+                                                    <div class="ml-4">
+                                                        <div class="text-sm font-medium leading-5 text-gray-900">{{ticket.resolver_profile.user.first_name}} {{ticket.resolver_profile.user.last_name}}
+                                                        </div>
+                                                        <div class="text-sm leading-5 text-gray-500">{{ticket.resolver_profile.user.email}}</div>
+                                                    </div>
+                                                </div>
+                                                {% else%}
+                                                 not assigned
+                                                {% endif %}
+                                            </td>
+    
+                                            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                                <div class="text-sm leading-5 text-gray-900">{{ticket.ticket_id}}</div>
+                                            
+                                            </td>
+
+                                            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                                <div class="text-sm leading-5 text-gray-900">{{ticket.customer.short_name}}</div>
+                                            
+                                            </td>
+    
+                                            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                                <span
+                                                    
+                                                    class="inline-flex px-2 text-xs font-semibold leading-5 {% if ticket.status == "INPROGRESS"  %} text-yellow-800 bg-yellow-100 {% elif  ticket.status == "RESOLVED"  %} text-blue-800 bg-blue-100 {% elif ticket.status == "QUEUED"%} text-red-800 bg-red-100 {% elif ticket.status == "CLOSED" %} text-green-800 bg-green-100 {% endif%} rounded-full">
+                                                                                          
+                                                    {{ticket.status}}</span>
+                                                   
+                                            </td>
+    
+                                            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                                <span
+                                                    
+                                                    class="inline-flex px-2 text-xs font-semibold leading-5 {% if ticket.priority == "INFO"  %} text-blue-800 bg-blue-100 {% elif  ticket.priority == "WARNING"  %} text-yellow-800 bg-yellow-100 {% elif ticket.priority == "CRITICAL"%} text-red-800 bg-red-100 {% elif ticket.priority == "FATAL" %} text-white bg-black {% endif %} rounded-full">
+                                                                                          
+                                                    {{ticket.priority}}</span>
+                                                   
+                                            </td>
+
+                                          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                                <div class="text-sm leading-5 text-gray-900">{{ticket.resolver_department.short_name}}</div>
+                                            
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                                <div class="text-sm leading-5 text-gray-900">{{ticket.title|truncatechars:50}}</div>
+                                            
+                                            </td>
+
+
+    
+                                            <td
+                                                class="px-6 py-4 text-sm font-medium leading-5 text-right whitespace-no-wrap border-b border-gray-200">
+                                              
+                                                {% if request.user.is_superuser or request.user.profile.department_manager %}
+                                                <a href="{%  url 'update_ticket' ticket.pk %}" class="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-primary-3 transition duration-150 ease-in-out hover:bg-primary-accent-300 hover:shadow-primary-2 focus:bg-primary-accent-300 focus:shadow-primary-2 focus:outline-none focus:ring-0 active:bg-primary-600 active:shadow-primary-2 dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong"
+                                                    data-twe-toggle="tooltip" title="Update ticket">
+                                                    <i class="fa-solid fa-gear"></i>
+                                                </a>
+                                                {% endif  %}
+                                               
+                                                
+                                                 {% if not own  and ticket.resolver_profile == None  and ticket.resolver_department == request.user.profile.department %}
+                                                   <button
+                                                    type="button"
+                                                    class="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-primary-3 transition duration-150 ease-in-out hover:bg-primary-accent-300 hover:shadow-primary-2 focus:bg-primary-accent-300 focus:shadow-primary-2 focus:outline-none focus:ring-0 active:bg-primary-600 active:shadow-primary-2 dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong"
+                                                    data-twe-toggle="modal"
+                                                    data-twe-target="#exampleModal-{{ticket.pk}}"
+                                                    data-twe-ripple-init
+                                                    data-twe-ripple-color="light">
+                                                    <i class="fa-regular fa-circle-user fa-lg" data-twe-toggle="tooltip" title="Assign to person"></i>
+                                                    </button>
+                                                    {% else %}
+                                                    
+                                                    <a href="{%  url 'ticket_detail' ticket.pk %}" class="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-primary-3 transition duration-150 ease-in-out hover:bg-primary-accent-300 hover:shadow-primary-2 focus:bg-primary-accent-300 focus:shadow-primary-2 focus:outline-none focus:ring-0 active:bg-primary-600 active:shadow-primary-2 dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong"
+                                                    data-twe-toggle="tooltip" title="Ticket info"
+                                                    >
+                                                    <i class="fa-solid fa-circle-info fa-lg"></i>
+                                                    </a>
+                                                
+                                                    
+                                                 {% endif %}
+                                                 
+                                                 
+                                              
+                                            </td>
+                                        
+                                        </tr>
+                                       
+                                    </tbody>
+
+                                    <!-- modal-->
+
+
+                                        <div
+                                        data-twe-modal-init
+                                        class="fixed left-0 top-0 z-[1055] hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none"
+                                        id="exampleModal-{{ticket.pk}}"
+                                        data-twe-backdrop="static"
+                                        data-twe-keyboard="false"
+                                        tabindex="-1"
+                                        aria-labelledby="staticBackdropLabel"
+                                        aria-hidden="true">
+                                        <div
+                                            data-twe-modal-dialog-ref
+                                            class="pointer-events-none relative w-auto translate-y-[-50px] opacity-0 transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:max-w-[500px]">
+                                            <div
+                                            class="pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-4 outline-none dark:bg-surface-dark">
+                                            <div
+                                                class="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 p-4 dark:border-white/10">
+                                                <!--Modal title-->
+                                                <h5
+                                                class="text-xl font-medium leading-normal text-surface dark:text-white"
+                                                id="exampleModalLabel">
+                                                Select a User:
+                                                </h5>
+                                                <!-- Close button -->
+                                                <button
+                                                type="button"
+                                                class="box-content rounded-none border-none text-neutral-500 hover:text-neutral-800 hover:no-underline focus:text-neutral-800 focus:opacity-100 focus:shadow-none focus:outline-none dark:text-neutral-400 dark:hover:text-neutral-300 dark:focus:text-neutral-300"
+                                                data-twe-modal-dismiss
+                                                aria-label="Close">
+                                                <span class="[&>svg]:h-6 [&>svg]:w-6">
+                                                    <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    fill="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                    stroke-width="1.5"
+                                                    stroke="currentColor">
+                                                    <path
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                </span>
+                                                </button>
+                                            </div>
+
+                                            <!-- Modal body -->
+                                            <form method = "POST" action="{% url 'assign_to_person' ticket.pk %}">
+                                            {% csrf_token %}
+                                            <div
+                                                class="relative flex justify-center p-4"
+                                                data-twe-modal-body-ref>
+
+                                                            <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an option</label>
+                                                            <select name="profiles" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                                {% for profile in profiles %}
+                                                                <option value="{{profile.pk}}">{{profile}}</option>
+                                                              
+                                                                {% endfor %}
+                                                            </select>
+
+                                            </div>
+
+
+                                                           
+
+                                            <!-- Modal footer -->
+                                            <div
+                                                class="flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t-2 border-neutral-100 p-4 dark:border-white/10">
+                                                <button
+                                                type="button"
+                                                class="inline-block rounded bg-primary-100 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-primary-700 transition duration-150 ease-in-out hover:bg-primary-accent-200 focus:bg-primary-accent-200 focus:outline-none focus:ring-0 active:bg-primary-accent-200 dark:bg-primary-300 dark:hover:bg-primary-400 dark:focus:bg-primary-400 dark:active:bg-primary-400"
+                                                data-twe-modal-dismiss
+                                                data-twe-ripple-init
+                                                data-twe-ripple-color="light">
+                                                Close
+                                                </button>
+                                                <button
+                                                type="submit"
+                                                class="ms-1 inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-primary-3 transition duration-150 ease-in-out hover:bg-primary-accent-300 hover:shadow-primary-2 focus:bg-primary-accent-300 focus:shadow-primary-2 focus:outline-none focus:ring-0 active:bg-primary-600 active:shadow-primary-2 dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong"
+                                                data-twe-ripple-init
+                                                data-twe-ripple-color="light">
+                                                Assign
+                                                </button>
+                                                </form>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        </div>
+
+
+
+                                    <!-- modal end -->
+
+
+
+
+                                    {% endfor %}
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+{% if all %}
+{% if tickets.has_other_pages %}
+<nav aria-label="Page navigation example" class="py-8">
+  <ul class="list-style-none flex">
+  {% if tickets.has_previous %}
+    <li>
+      <a
+        class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-surface transition duration-300 hover:bg-neutral-100 focus:bg-neutral-100 focus:text-primary-700 focus:outline-none focus:ring-0 active:bg-neutral-100 active:text-primary-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:focus:text-primary-500 dark:active:bg-neutral-700 dark:active:text-primary-500"
+        href="?page={{ tickets.previous_page_number }}{% if request.GET.list_radio %}&list_radio={{ request.GET.list_radio }}{% endif %}"
+        >Previous</a
+      >
+    </li>
+    {% endif %}
+    {% for num in tickets.paginator.page_range %}
+        {% if tickets.number == num %}
+            <li>
+            <a
+                class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-surface transition duration-300 hover:bg-neutral-100 focus:bg-neutral-100 focus:text-primary-700 focus:outline-none active:bg-neutral-100 active:text-primary-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:focus:text-primary-500 dark:active:bg-neutral-700 dark:active:text-primary-500"
+                href="">{{ num }}</a>
+            </li>
+        {% else %}
+
+        <li>
+        <a
+            class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-surface transition duration-300 hover:bg-neutral-100 focus:bg-neutral-100 focus:text-primary-700 focus:outline-none active:bg-neutral-100 active:text-primary-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:focus:text-primary-500 dark:active:bg-neutral-700 dark:active:text-primary-500"
+            href="?page={{ num }}{% if request.GET.list_radio %}&list_radio={{ request.GET.list_radio }}{% endif %}">{{ num }}</a>
+        </li>
+        
+        {% endif %}
+    {% endfor %}
+   {% if tickets.has_next %}
+    <li>
+      <a
+        class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-surface transition duration-300 hover:bg-neutral-100 focus:bg-neutral-100 focus:text-primary-700 focus:outline-none active:bg-neutral-100 active:text-primary-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:focus:text-primary-500 dark:active:bg-neutral-700 dark:active:text-primary-500"
+        href="?page={{ tickets.next_page_number }}{% if request.GET.list_radio %}&list_radio={{ request.GET.list_radio }}{% endif %}"
+        >Next</a>
+    </li>
+    {% else %}
+
+    <li>
+      <a
+        class="disabled relative block rounded bg-transparent px-3 py-1.5 text-sm text-surface transition duration-300 hover:bg-neutral-100 focus:bg-neutral-100 focus:text-primary-700 focus:outline-none active:bg-neutral-100 active:text-primary-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:focus:text-primary-500 dark:active:bg-neutral-700 dark:active:text-primary-500"
+        href=""
+        ></a>
+    </li>
+    {% endif %}
+  </ul>
+</nav>
+
+
+{% endif %}
+{% endif %}
+
+
+{% if group %}
+
+<nav aria-label="Page navigation example" class="py-8">
+  <ul class="list-style-none flex">
+  {% if tickets.has_previous %}
+    <li>
+      <a
+        class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-surface transition duration-300 hover:bg-neutral-100 focus:bg-neutral-100 focus:text-primary-700 focus:outline-none focus:ring-0 active:bg-neutral-100 active:text-primary-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:focus:text-primary-500 dark:active:bg-neutral-700 dark:active:text-primary-500"
+        href="?page={{tickets.previous_page_number}}"
+        >Previous</a
+      >
+    </li>
+    {% endif %}
+    {% for page  in tickets.paginator.page_range %}
+    <li>
+      <a
+        class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-surface transition duration-300 hover:bg-neutral-100 focus:bg-neutral-100 focus:text-primary-700 focus:outline-none active:bg-neutral-100 active:text-primary-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:focus:text-primary-500 dark:active:bg-neutral-700 dark:active:text-primary-500"
+        href="?page={{page}}">{{page}}</a>
+    </li>
+    {% endfor %}
+   {% if all_users.has_next %}
+    <li>
+      <a
+        class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-surface transition duration-300 hover:bg-neutral-100 focus:bg-neutral-100 focus:text-primary-700 focus:outline-none active:bg-neutral-100 active:text-primary-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:focus:text-primary-500 dark:active:bg-neutral-700 dark:active:text-primary-500"
+        href="?page={{tickets.next_page_number}}"
+        >Next</a>
+    </li>
+    {% endif %}
+  </ul>
+</nav>
+
+{% endif %}
+
+
+
+
+
+
+
+{% if search %}
+{% if tickets.has_other_pages %}
+<nav aria-label="Page navigation example" class="py-8">
+  <ul class="list-style-none flex">
+  {% if tickets.has_previous %}
+    <li>
+      <a
+        class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-surface transition duration-300 hover:bg-neutral-100 focus:bg-neutral-100 focus:text-primary-700 focus:outline-none focus:ring-0 active:bg-neutral-100 active:text-primary-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:focus:text-primary-500 dark:active:bg-neutral-700 dark:active:text-primary-500"
+        href="?page={{ tickets.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}"
+        >Previous</a
+      ></li>
+    {% endif %}
+    {% for num in tickets.paginator.page_range %}
+        {% if tickets.number == num %}
+            <li>
+            <a
+                class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-surface transition duration-300 hover:bg-neutral-100 focus:bg-neutral-100 focus:text-primary-700 focus:outline-none active:bg-neutral-100 active:text-primary-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:focus:text-primary-500 dark:active:bg-neutral-700 dark:active:text-primary-500"
+                href="">{{ num }}</a>
+            </li>
+        {% else %}
+
+        <li>
+        <a
+            class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-surface transition duration-300 hover:bg-neutral-100 focus:bg-neutral-100 focus:text-primary-700 focus:outline-none active:bg-neutral-100 active:text-primary-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:focus:text-primary-500 dark:active:bg-neutral-700 dark:active:text-primary-500"
+            href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">{{ num }}</a>
+        </li>
+        
+        {% endif %}
+    {% endfor %}
+   {% if tickets.has_next %}
+    <li>
+      <a
+        class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-surface transition duration-300 hover:bg-neutral-100 focus:bg-neutral-100 focus:text-primary-700 focus:outline-none active:bg-neutral-100 active:text-primary-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:focus:text-primary-500 dark:active:bg-neutral-700 dark:active:text-primary-500"
+        href="?page={{ tickets.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}"
+        >Next</a>
+    </li>
+    {% else %}
+
+    <li>
+      <a
+        class="disabled relative block rounded bg-transparent px-3 py-1.5 text-sm text-surface transition duration-300 hover:bg-neutral-100 focus:bg-neutral-100 focus:text-primary-700 focus:outline-none active:bg-neutral-100 active:text-primary-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:focus:text-primary-500 dark:active:bg-neutral-700 dark:active:text-primary-500"
+        href=""
+        ></a>
+    </li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}
+{% endif %}
+
+
+<div class="py-8">
+<a href={% url 'home' %}  class="text-white  bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">back</a>
+</div>
+{% endblock content %}

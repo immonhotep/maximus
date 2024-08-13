@@ -1,0 +1,106 @@
+<div class="grid grid-cols-2 gap-2">
+  <div>
+
+    <h3 class="py-10">All tickets By Priority</h3>
+    
+    
+      <div id="container py-6" style="width: 75%;">
+        <canvas id="ticket_chart_admin" data-url="{% url 'ticket_chart_admin' %}"></canvas>
+      </div>
+
+  </div>
+
+  <div>
+
+    <h3 class="py-10">All tickets By status</h3>
+
+      <div id="container py-6" style="width: 75%;">
+        <canvas id="ticket_status_chart_admin" data-url="{% url 'ticket_status_chart_admin' %}"></canvas>
+      </div>
+  </div>
+</div>
+
+<script>
+
+
+ $(function () {
+
+      var $ticket_chart_admin = $("#ticket_chart_admin");
+      $.ajax({
+        url: $ticket_chart_admin.data("url"),
+        success: function (data) {
+
+          var ctx = $ticket_chart_admin[0].getContext("2d");
+         
+          new Chart(ctx, {
+            type: 'pie',
+            data: {
+              labels: data.labels,
+              datasets: [{
+                label: 'amount',
+                backgroundColor: [
+                      '#85d4ef', '#e3e82d', '#f43f17', '#0c0301',
+                      ],
+                data: data.data
+                
+              }]          
+            },
+            options: {
+              responsive: true,
+              legend: {
+                position: 'top',
+              },
+              title: {
+                display: true,
+                text: 'Priority Chart'
+              }
+            }
+          });
+
+        }
+      });
+
+    });
+
+
+
+
+     $(function () {
+
+      var $ticket_status_chart_admin = $("#ticket_status_chart_admin");
+      $.ajax({
+        url: $ticket_status_chart_admin.data("url"),
+        success: function (data) {
+
+          var ctx = $ticket_status_chart_admin[0].getContext("2d");
+         
+          new Chart(ctx, {
+            type: 'pie',
+            data: {
+              labels: data.labels,
+              datasets: [{
+                label: 'Amount',
+                backgroundColor: [
+                      '#f43f17', '#e3e82d', '#85d4ef', '#1e9014',
+                      ],
+                data: data.data
+              }]          
+            },
+            options: {
+              responsive: true,
+              legend: {
+                position: 'top',
+              },
+              title: {
+                display: true,
+                text: 'Status Chart'
+              }
+            }
+          });
+
+        }
+      });
+
+    });
+
+</script>
